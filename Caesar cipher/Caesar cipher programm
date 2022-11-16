@@ -1,0 +1,147 @@
+def cipher_unknown_letter(letter, shift=3):
+    '''
+    Here all ciphering goes
+    :param letter: letter that you need to cipher
+    :param shift: fixed number of positions that you need to go down the alphabet
+    :return: ciphered letter
+    '''
+    alphabet = {'A': 1,
+                'B': 2,
+                'C': 3,
+                'D': 4,
+                'E': 5,
+                'F': 6,
+                'G': 7,
+                'H': 8,
+                'I': 9,
+                'J': 10,
+                'K': 11,
+                'L': 12,
+                'M': 13,
+                'N': 14,
+                'O': 15,
+                'P': 16,
+                'Q': 17,
+                'R': 18,
+                'S': 19,
+                'T': 20,
+                'U': 21,
+                'V': 22,
+                'W': 23,
+                'X': 24,
+                'Y': 25,
+                'Z': 26
+                }
+
+    ciphered_letter_index = alphabet[letter.upper()] + shift
+    if ciphered_letter_index > 26:
+        ciphered_letter_index -= 26
+    ciphered_letter = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[ciphered_letter_index - 1]
+
+    return ciphered_letter
+
+
+def cipher_text(text, shift):
+    ciphered = {}
+    ciphered_sentence = ''
+    for letter in text:
+        if letter.isalpha():
+            if letter not in ciphered:
+                ciphered_letter = cipher_unknown_letter(letter, shift)
+                ciphered[letter] = ciphered_letter
+            else:
+                ciphered_letter = ciphered[letter]
+            if letter.islower():
+                ciphered_letter = ciphered_letter.lower()
+            ciphered_sentence += ciphered_letter
+        else:
+            ciphered_sentence += letter
+
+    return ciphered_sentence
+
+
+def to_decipher(letter, shift):
+    alphabet = {'A': 1,
+                'B': 2,
+                'C': 3,
+                'D': 4,
+                'E': 5,
+                'F': 6,
+                'G': 7,
+                'H': 8,
+                'I': 9,
+                'J': 10,
+                'K': 11,
+                'L': 12,
+                'M': 13,
+                'N': 14,
+                'O': 15,
+                'P': 16,
+                'Q': 17,
+                'R': 18,
+                'S': 19,
+                'T': 20,
+                'U': 21,
+                'V': 22,
+                'W': 23,
+                'X': 24,
+                'Y': 25,
+                'Z': 26
+                }
+    ciphered_letter_index = alphabet[letter.upper()] - shift
+    if ciphered_letter_index < 0:
+        ciphered_letter_index += 26
+    ciphered_letter = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[ciphered_letter_index - 1]
+    return ciphered_letter
+
+
+def decipher_text(text):
+    '''
+    Deciphering text using brut force method
+    :param text: text you need to decipher
+    :return: dictionary of ready sentences and its shift
+    '''
+
+    gotten_deciphered_sentences = {}
+    for shift in range(1, 26):
+        ciphered_sentence = ''
+        ciphered = {}
+        for letter in text:
+            if letter.isalpha():
+                if letter not in ciphered:
+                    ciphered_letter = to_decipher(letter, shift)
+                    ciphered[letter] = ciphered_letter
+                else:
+                    ciphered_letter = ciphered[letter]
+                if letter.islower():
+                    ciphered_letter = ciphered_letter.lower()
+                ciphered_sentence += ciphered_letter
+            else:
+                ciphered_sentence += letter
+
+        gotten_deciphered_sentences[shift] = ciphered_sentence
+
+    return gotten_deciphered_sentences
+
+
+def run():
+    sentence_to_cipher = input('Input text: ')
+    method = int(input('Input 0 if you want to cipher it, \n or 1 if you want do decipher text: '))
+    if method == 0:
+        shift = int(input('Input shift: '))
+        sentence = cipher_text(sentence_to_cipher, shift)
+        print(f'Ready text: \n{sentence}')
+
+    elif method == 1:
+        sentences = decipher_text(sentence_to_cipher)
+        print('Deciphering is ready. Choose the most correct: ')
+        for i in sentences:
+            print(f'{i}:{sentences[i]}')
+
+    return
+
+
+if __name__ == "__main__":
+    run()
+
+
